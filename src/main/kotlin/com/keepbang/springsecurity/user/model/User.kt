@@ -13,18 +13,26 @@ class User(
     password: String
 ) : AutoLongKeyBaseEntity() {
 
-    @Column( name = "password", nullable = false)
+    @Column(name = "password", nullable = false)
     var password: String = password
         private set
 
     @OneToMany(
         fetch = FetchType.EAGER,
         mappedBy = "user",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
     )
     @Fetch(FetchMode.JOIN)
-    val roles: Set<UserAuthority> = emptySet()
+    val roles: MutableSet<UserAuthority> = mutableSetOf(
+        UserAuthority(
+            this, Role.USER
+        )
+    )
 
 
+    fun updateRole() {
 
+    }
 
 }

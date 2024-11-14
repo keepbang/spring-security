@@ -13,17 +13,20 @@ class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf {
-            it.disable()
+        http.authorizeHttpRequests {
+            it.requestMatchers("/api/singup").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
         }.formLogin {
             it.loginProcessingUrl("/login")
                 .usernameParameter("id")
                 .passwordParameter("password")
         }.sessionManagement {
             it.disable()
-        }.authorizeHttpRequests {
-            it.requestMatchers("/api/singup").permitAll()
-                .anyRequest().authenticated()
+        }.csrf {
+            it.disable()
+        }.headers {
+            it.frameOptions { it.disable() }
         }
 
         return http.build()
