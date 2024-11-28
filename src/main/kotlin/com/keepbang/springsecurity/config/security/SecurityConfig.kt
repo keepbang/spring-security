@@ -8,26 +8,26 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.authorizeHttpRequests {
-            it.requestMatchers("/api/singup").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated()
-        }.formLogin {
-            it.loginProcessingUrl("/login")
-                .usernameParameter("id")
-                .passwordParameter("password")
-        }.sessionManagement {
-            it.disable()
-        }.csrf {
-            it.disable()
-        }.headers {
-            it.frameOptions { it.disable() }
-        }
+        http.httpBasic { it.disable() }
+            .sessionManagement { it.disable() }
+            .csrf { it.disable() }
+            .authorizeHttpRequests {
+                it.requestMatchers("/api/singup").permitAll()
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .anyRequest().authenticated()
+            }.formLogin {
+                it.loginProcessingUrl("/login")
+                    .usernameParameter("id")
+                    .passwordParameter("password")
+            }
+            .headers {
+                it.frameOptions { it.disable() }
+            }
 
         return http.build()
     }

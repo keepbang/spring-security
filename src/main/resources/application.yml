@@ -26,7 +26,6 @@ spring:
         format_sql: true      # 쿼리 로그 포맷 (정렬)
         show_sql: true        # 쿼리 로그 출력
         use_sql_comments: true  #JPQL 볼수 있음
-
 app:
   jwt:
-    key: jwtkey123456789
+    key: bba4daee9dd48ca358cded4de7d8a6ef0ced7900090bcb057255ba011f73cf85 # https://jwtsecret.com/generate
