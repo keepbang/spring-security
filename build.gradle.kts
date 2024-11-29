@@ -40,8 +40,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
-    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")

@@ -5,7 +5,15 @@ import jakarta.persistence.*
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 
+const val ENTITY_GRAPH_USER_ROLES = "User.roles"
+
 @Entity
+@NamedEntityGraph(
+    name = ENTITY_GRAPH_USER_ROLES,
+    attributeNodes = [
+        NamedAttributeNode("_roles"),
+    ]
+)
 @Table(name = "users")
 class User(
     @Column(nullable = false, unique = true)
@@ -24,11 +32,15 @@ class User(
         orphanRemoval = true
     )
     @Fetch(FetchMode.JOIN)
-    val roles: MutableSet<UserAuthority> = mutableSetOf(
+    private var  _roles: MutableSet<UserAuthority> = mutableSetOf(
         UserAuthority(
             this, Role.USER
         )
     )
+    val roles: Set<String>
+        get() = this._roles
+            .map { it.role.getCode() }
+            .toSet()
 
 
     fun updateRole() {

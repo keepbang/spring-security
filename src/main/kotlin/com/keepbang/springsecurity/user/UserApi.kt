@@ -17,7 +17,7 @@ class UserApi(
     @PostMapping("/singup")
     fun singUp(@RequestBody dto: CreateUserDto): ResponseEntity<UserDto> {
         return ResponseEntity.ok(
-            userService.create(dto)
+            userService.save(dto)
         )
     }
 
