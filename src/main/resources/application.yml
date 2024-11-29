@@ -29,3 +29,9 @@ spring:
 app:
   jwt:
     key: bba4daee9dd48ca358cded4de7d8a6ef0ced7900090bcb057255ba011f73cf85 # https://jwtsecret.com/generate
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true

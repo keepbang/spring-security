@@ -6,6 +6,7 @@ plugins {
     kotlin("plugin.noarg") version "1.9.25"
     id("org.springframework.boot") version "3.3.5"
     id("io.spring.dependency-management") version "1.1.6"
+    kotlin("kapt") version "1.9.25"
 }
 
 group = "com.keepbang"
@@ -49,6 +50,14 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+
+    // swagger
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
+    // swagger javadoc
+    kapt("com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0")
+    implementation("com.github.therapi:therapi-runtime-javadoc:0.15.0")
 
 
     runtimeOnly("com.h2database:h2")

@@ -21,8 +21,16 @@ class SecurityConfig {
             .sessionManagement { it.disable() }
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/api/singup").permitAll()
-                    .requestMatchers("/h2-console/**").permitAll()
+                it
+                    .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/favicon.ico",
+                        "/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/swagger/**",
+                    ).permitAll()
+                    .requestMatchers("/api/singup", "/h2-console/**").permitAll()
                     .requestMatchers("/view/user").hasAuthority(Role.USER.getCode())
                     .requestMatchers("/view/system-admin").hasAuthority(Role.SYSTEM_ADMIN.getCode())
                     .requestMatchers("/view/paid-user").hasAuthority(Role.PAID_USER.getCode())
