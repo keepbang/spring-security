@@ -28,7 +28,9 @@ spring:
         use_sql_comments: true  #JPQL 볼수 있음
 app:
   jwt:
-    key: bba4daee9dd48ca358cded4de7d8a6ef0ced7900090bcb057255ba011f73cf85 # https://jwtsecret.com/generate
+    key: 8sknjlO3NdTBqo319DHLnQSqafRJEdKsETOdsDHLnQA2 # https://jwtsecret.com/generate
+    expired-hours: 2 # hour
+    refresh-expired: 2_419_200_000 #  (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 28(4주))
 
 springdoc:
   swagger-ui:

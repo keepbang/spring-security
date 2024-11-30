@@ -1,9 +1,9 @@
 package com.keepbang.springsecurity.config.security
 
+import com.keepbang.springsecurity.config.jwt.JwtProvider
 import com.keepbang.springsecurity.user.model.Role
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -13,7 +13,9 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 
 @Configuration
 @EnableWebSecurity(debug = true)
-class SecurityConfig {
+class SecurityConfig(
+    private val jwtProvider: JwtProvider
+) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -41,6 +43,7 @@ class SecurityConfig {
                     .usernameParameter("id")
                     .passwordParameter("password")
                     .defaultSuccessUrl("/view/main")
+                    .successHandler(CustomLoginSuccessHandler(jwtProvider))
             }.logout {
                 it.logoutSuccessHandler(HttpStatusReturningLogoutSuccessHandler())
                     .logoutSuccessUrl("/login")
@@ -48,6 +51,7 @@ class SecurityConfig {
             .headers {
                 it.frameOptions { it.disable() }
             }
+
 
         return http.build()
     }
