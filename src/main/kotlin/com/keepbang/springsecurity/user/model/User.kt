@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 
-const val ENTITY_GRAPH_USER_ROLES = "User.roles"
+const val ENTITY_GRAPH_USER_ROLES: String = "User.roles"
 
 @Entity
 @NamedEntityGraph(

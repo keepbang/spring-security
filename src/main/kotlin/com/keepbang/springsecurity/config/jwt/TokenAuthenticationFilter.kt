@@ -33,8 +33,8 @@ class TokenAuthenticationFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun getAccessToken(authorizationHeader: String): Optional<String> {
-        if (Objects.nonNull(authorizationHeader)
+    private fun getAccessToken(authorizationHeader: String?): Optional<String> {
+        if (authorizationHeader != null
             && authorizationHeader.startsWith(TokenConst.TOKEN_PREFIX.headerName)
         ) {
             return Optional.of<String>(
