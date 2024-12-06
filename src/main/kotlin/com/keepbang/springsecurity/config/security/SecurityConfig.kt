@@ -47,7 +47,8 @@ class SecurityConfig(
             .formLogin { it.disable() }
             .headers {
                 it.frameOptions { it.disable() }
-            }.addFilterBefore(
+            }
+            .addFilterBefore(
                 TokenAuthenticationFilter(jwtProvider),
                 UsernamePasswordAuthenticationFilter::class.java
             )

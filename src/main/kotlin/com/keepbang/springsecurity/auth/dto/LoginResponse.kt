@@ -1,3 +1,3 @@
 package com.keepbang.springsecurity.auth.dto
 
-data class LoginResponse(val token: String)
+data class LoginResponse(val token: String, val refreshToken: String)

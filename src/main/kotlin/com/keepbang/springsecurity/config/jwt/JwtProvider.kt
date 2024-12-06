@@ -1,5 +1,6 @@
 package com.keepbang.springsecurity.config.jwt
 
+import com.keepbang.springsecurity.common.exception.UnauthenticatedException
 import com.keepbang.springsecurity.config.AppProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
@@ -8,7 +9,6 @@ import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.time.Duration
@@ -21,9 +21,22 @@ class JwtProvider(props: AppProperties) {
     private val expiredHours: Long = props.jwt.expiredHours
     private val refreshExpired: Long = props.jwt.refreshExpired
 
-    fun generateToken(userId: String, roles: List<String>): String {
+    fun generateToken(
+        userId: String,
+        tokenType: TokenType,
+        roles: List<String> = emptyList()
+    ): String {
         val now = Date()
-        val expiredAt = Duration.ofHours(expiredHours)
+
+        if (tokenType == TokenType.REFRESH_TOKEN && roles.isNotEmpty()) {
+            throw UnauthenticatedException("Invalid Token generate parameter")
+        }
+
+        val expiredAt = when (tokenType) {
+            TokenType.ACCESS_TOKEN -> Duration.ofHours(expiredHours)
+            TokenType.REFRESH_TOKEN -> Duration.ofDays(refreshExpired)
+        }
+
         val key: SecretKey = secretKey
 
         return Jwts.builder()
@@ -33,10 +46,17 @@ class JwtProvider(props: AppProperties) {
             .expiration(Date(now.time + expiredAt.toMillis()))
             .subject(userId)
             .claims(
-                mapOf("roles" to roles)
+                mapOf(
+                    "roles" to roles,
+                    "typ" to tokenType
+                ),
             )
             .signWith(key)
             .compact()
+    }
+
+    fun generateRefreshToken(userId: String) : String {
+        return this.generateToken(userId, TokenType.REFRESH_TOKEN)
     }
 
     fun getAuthentication(token: String): Authentication {
@@ -62,6 +82,13 @@ class JwtProvider(props: AppProperties) {
             .parseSignedClaims(token)
     }
 
+}
+
+enum class TokenType(
+    val value: String
+) {
+    ACCESS_TOKEN("act"),
+    REFRESH_TOKEN("rft")
 }
 
 enum class TokenConst(

@@ -2,6 +2,7 @@ package com.keepbang.springsecurity.auth
 
 import com.keepbang.springsecurity.auth.dto.LoginResponse
 import com.keepbang.springsecurity.config.jwt.JwtProvider
+import com.keepbang.springsecurity.config.jwt.TokenType
 import com.keepbang.springsecurity.config.security.LoginRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -27,12 +28,15 @@ class AuthApi(
         )
 
         val token = jwtProvider.generateToken(
-            authentication.getName(),
-            authentication.getAuthorities()
+            userId = authentication.name,
+            tokenType = TokenType.ACCESS_TOKEN,
+            roles = authentication.authorities
                 .map { it.authority }
         )
 
-        return ResponseEntity.ok<Any>(LoginResponse(token))
+        val refreshToken = jwtProvider.generateRefreshToken(authentication.name)
+
+        return ResponseEntity.ok<Any>(LoginResponse(token, refreshToken))
     }
 
 }

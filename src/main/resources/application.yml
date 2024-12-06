@@ -30,7 +30,7 @@ app:
   jwt:
     key: 8sknjlO3NdTBqo319DHLnQSqafRJEdKsETOdsDHLnQA2 # https://jwtsecret.com/generate
     expired-hours: 2 # hour
-    refresh-expired: 2_419_200_000 #  (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 28(4주))
+    refresh-expired: 30 #  30일
 
 springdoc:
   swagger-ui:

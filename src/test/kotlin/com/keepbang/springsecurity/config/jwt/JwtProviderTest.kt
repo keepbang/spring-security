@@ -38,10 +38,14 @@ class JwtProviderTest {
     fun `token generate test`() {
         // given
         val userId = "userId"
-        val roles = mutableSetOf(SimpleGrantedAuthority("ROLE_USER"))
+        val roles = listOf("ROLE_USER")
 
         // when
-        val token = jwtProvider.generateToken(userId = userId, roles = roles)
+        val token = jwtProvider.generateToken(
+            userId = userId,
+            tokenType = TokenType.ACCESS_TOKEN,
+            roles = roles
+        )
 
         // then
         assertThat(token).isNotNull
