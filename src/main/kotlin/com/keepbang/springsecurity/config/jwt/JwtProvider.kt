@@ -61,6 +61,9 @@ class JwtProvider(props: AppProperties) {
 
     fun getAuthentication(token: String): Authentication {
         val claims: Claims = getClaims(token)
+
+        this.validationToken(claims["typ"] as TokenType, TokenType.ACCESS_TOKEN)
+
         // `roles`를 SimpleGrantedAuthority로 변환
         val authorities = (claims["roles"] as List<*>)
             .map { SimpleGrantedAuthority(it.toString()) }
@@ -70,7 +73,7 @@ class JwtProvider(props: AppProperties) {
         )
     }
 
-    private fun getClaims(token: String): Claims {
+    fun getClaims(token: String): Claims {
         return getClaimsJws(token)
             .payload
     }
@@ -80,6 +83,13 @@ class JwtProvider(props: AppProperties) {
             .verifyWith(secretKey)
             .build()
             .parseSignedClaims(token)
+    }
+
+    fun validationToken(inputTokenType: TokenType, tokenType: TokenType) {
+        // token type 검증
+        if (inputTokenType != tokenType) {
+            throw UnauthenticatedException("Token is Invalid")
+        }
     }
 
 }

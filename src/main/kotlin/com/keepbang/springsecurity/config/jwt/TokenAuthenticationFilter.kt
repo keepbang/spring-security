@@ -26,7 +26,9 @@ class TokenAuthenticationFilter(
         val oToken: Optional<String> = getAccessToken(authorizationHeader)
 
         oToken.ifPresent { token: String ->
+            // 토큰 검증 및 authentication 생성
             val authentication: Authentication = jwtProvider.getAuthentication(token)
+            //authentication 정보 security에 저장
             SecurityContextHolder.getContext().authentication = authentication
         }
 
